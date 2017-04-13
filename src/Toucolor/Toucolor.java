@@ -20,6 +20,15 @@ public class Toucolor  extends PApplet {
     }
 
     /**
+     * initializes the world
+     * initializes a Level on startup (will be changed)
+     */
+    @Override
+    public  void setup() {
+        frameRate(144);
+    }
+
+    /**
      * define and initialize settings for the world
      */
     @Override
@@ -34,7 +43,4 @@ public class Toucolor  extends PApplet {
     public void draw() {
 
     }
-
-
-
 }
