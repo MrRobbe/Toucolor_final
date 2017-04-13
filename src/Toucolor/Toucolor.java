@@ -95,6 +95,23 @@ public class Toucolor extends PApplet {
 
     }
 
+    @Override
+     public void keyPressed() {
+        if(status.equals("startscreen")) {
+            menu.renderStartScreen();
+            menu.keyPressed(keyCode);
+        }
+        else if(status.equals("levelSelectScreen")) {
+
+        }
+        else if(status.equals("loadScreen")) {
+
+        }
+        else if( status.equals("playing")){
+
+        }
+    }
+
     /**
      * creates new level object and initializes it.
      * makes it ready to render the level
