@@ -14,6 +14,10 @@ public class Toucolor  extends PApplet {
     private int worldWidth = 1280;
     private int worldHeight = 720;
 
+    //level vars
+    private Level testLeel;
+    private int posX;
+
 
     public static void main(String args[]) {
         PApplet.main(new String[]{"Toucolor.Toucolor"});
@@ -26,6 +30,9 @@ public class Toucolor  extends PApplet {
     @Override
     public  void setup() {
         frameRate(144);
+        testLeel = new Level(this, "level1.csv");
+        posX = 600;
+
     }
 
     /**
@@ -41,6 +48,7 @@ public class Toucolor  extends PApplet {
      */
     @Override
     public void draw() {
-
+        testLeel.renderLevel(posX);
+        posX++;
     }
 }
