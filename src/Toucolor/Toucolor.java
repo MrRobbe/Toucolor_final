@@ -18,6 +18,9 @@ public class Toucolor  extends PApplet {
     int sizeY = 720;
     static int blockSize = 80;
 
+
+    Enemy[] Enemies;
+
     //Player variabelern
     float xpos;
     float ypos;
@@ -43,6 +46,7 @@ public class Toucolor  extends PApplet {
     @Override
     public void draw(){
         background(225);
+        EnemiesBehaviour(speler.playerX, speler.playerY);
         PlayerBehaviour();
         drawCube();
     }
@@ -84,6 +88,15 @@ public class Toucolor  extends PApplet {
         }
         if(keyCode == DOWN){
             speler.downPressed = false;
+        }
+    }
+
+    private void EnemiesBehaviour(float playerX, float playerY){
+        for (Enemy vijand:Enemies) {
+            if(vijand.EnemyBehave(playerX,playerY)){
+                PApplet.println("DEUD");
+                exit();
+            }
         }
     }
 
