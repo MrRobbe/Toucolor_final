@@ -18,8 +18,10 @@ public class Toucolor  extends PApplet {
     int sizeY = 720;
     static int blockSize = 80;
 
+    Enemy goedkoop_sletje = new Enemy(1,1,0.01f,400,640);
 
-    Enemy[] Enemies;
+
+    Enemy[] Enemies = {goedkoop_sletje};
 
     //Player variabelern
     float xpos;
@@ -60,6 +62,8 @@ public class Toucolor  extends PApplet {
     public void drawCube() {
         fill(255, 255, 0);
         rect(speler.playerX, speler.playerY, blockSize, blockSize);
+        fill(0,200,0);
+        rect(goedkoop_sletje.posX,goedkoop_sletje.posY, blockSize, blockSize);
     }
 
     public void keyPressed() {
