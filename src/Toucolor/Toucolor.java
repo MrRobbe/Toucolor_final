@@ -18,7 +18,7 @@ public class Toucolor  extends PApplet {
     int sizeY = 720;
     static int blockSize = 80;
 
-    Enemy goedkoop_sletje = new Enemy(1,1,0.01f,400,640);
+    Enemy goedkoop_sletje = new Enemy(3,1,0.01f,400,640);
 
 
     Enemy[] Enemies = {goedkoop_sletje};

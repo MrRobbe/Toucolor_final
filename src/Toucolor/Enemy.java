@@ -52,14 +52,14 @@ public class Enemy {
                 hoek = 0;
             }
         }
-        else if(moveP == 3){ //Iets random
+        else if(moveP == 3){ //Cirkel
             if(PApplet.cos(hoek) > 0){
                 posX = posX + bereik*PApplet.cos(hoek);
-                posY = posY - bereik*PApplet.cos(hoek);
+                posY = posY - bereik*PApplet.sin(hoek);
                 hoek += moveSnelh;
             }else{
                 posX = posX + bereik*PApplet.cos(hoek);
-                posY = posY - bereik*PApplet.cos(hoek);
+                posY = posY - bereik*PApplet.sin(hoek);
                 hoek += moveSnelh;
             }
             if(hoek >= 2* PApplet.PI){
