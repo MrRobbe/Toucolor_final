@@ -1,0 +1,4 @@
+id,filename,collision,name,brokkelt,death
+0,block1.jpg,TRUE,cloud,false,true
+1,block2.jpg,FALSE,none,false,false
+2,block3.jpg,TRUE,ground,true,false
