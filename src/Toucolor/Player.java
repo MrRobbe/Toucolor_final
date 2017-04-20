@@ -130,15 +130,7 @@ public class Player {
             switch (status) {
                 case 1: //links en rechts
                     float cst = playerX + (moveSpeed * cProfile) * colvar;
-                    if (cst > 1200) {
-                        playerX = 1200;
-                        collide = true;
-                    }
-                    else if(cst < 1){
-                        collide = true;
-                        playerX = 1;
-                    }
-                    else if ((PApplet.abs(cst - xblock) < blockSize) && (PApplet.abs(playerY - yblock) < blockSize)) {
+                    if ((PApplet.abs(cst - xblock) < blockSize) && (PApplet.abs(playerY - yblock) < blockSize)) {
                         playerX = xblock - blockSize * colvar;
                         collide = true;
                     } else if (!upIsPressed) {

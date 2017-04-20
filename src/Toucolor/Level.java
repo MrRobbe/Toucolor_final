@@ -7,6 +7,7 @@ package Toucolor;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.data.*;
 
@@ -35,6 +36,7 @@ public class Level {
     private String levelFileName; //name of the file which describes the Level
     private int[][] levelMap; //an array which holds the map
     private PImage background;
+    private PGraphics level;
 
     //not sure if this is used somewhere
     Level(PApplet applet, String levelFileName) {
@@ -78,7 +80,7 @@ public class Level {
             boolean brokkelt = PApplet.parseBoolean(row.getString("brokkelt"));
             boolean kills = PApplet.parseBoolean(row.getString("death"));
 
-            tileBlocks[id] = new Block(id, name, imgFileName, collision, brokkelt, kills, applet); //load the img into the array
+            tileBlocks[id] = new Block(id, name, imgFileName, collision, brokkelt, kills, level, applet); //load the img into the array
 
 //            //debug info
 //            PApplet.print("img loaded:" + row.getString("filename") + "\n");
@@ -110,6 +112,29 @@ public class Level {
             }
         }
 
+        int levelWidth = columnCount * Toucolor.BLOCKSIZE;
+        int levelHeight = rowCount * Toucolor.BLOCKSIZE;
+        level = applet.createGraphics(levelWidth, levelHeight);
+        level.beginDraw();
+        //we draw the level here
+            //render backgorund
+            level.imageMode(PConstants.CORNER);
+            level.background(255);
+
+            //now draw all the blocks
+            level.rectMode(PConstants.CORNER);
+            for (int i = 0; i < columnCount; i++) {
+                for (int u = 0; u < 9; u++) {
+                    Block currentBlock = tileBlocks[levelMap[i][u]];
+                    if(currentBlock.drawBlock()) {
+                        level.image(currentBlock.renderblock(),(i *80), u * 80, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
+                    }
+                }
+            }
+
+        level.endDraw();
+
+
         PApplet.print( this.levelFileName + " has been loaded.\n");
     }
 
@@ -120,36 +145,17 @@ public class Level {
      * @param playerX x-coordinate of player
      */
     void renderLevel(int playerX) {
-        //render backgorund
+        int drawX = -((((playerX - 600) < 0) ? 0 : (playerX - 600)));
         applet.imageMode(PConstants.CORNER);
-        applet.background(255);
-        //applet.image(background, 0,0, Toucolor.WORLDWIDTH, Toucolor.WORLDHEIGHT);
-        /*
-         * the position to start drawing:
-         * -( (playerX -600) % 80 ) but it only if playerX - 600 > 0
-         *  playerX -600 has to be positive and we need the remainder --> modulo
-          */
-        int startScrX =  -((((playerX - 600) < 0) ? 0 : (playerX - 600)) % BLOCKWIDTH);
-        int startBlock = ((((playerX - 600) < 0) ? 0 : (playerX - 600)) / BLOCKWIDTH); //calculates on which block to start
-        //test commnet
-        //PApplet.print(levelMap.length);
-        applet.rectMode(PConstants.CORNER);
-        for (int i = 0; i < 16; i++) {
-            for (int u = 0; u < 9; u++) {
-                Block currentBlock = tileBlocks[levelMap[i +startBlock][u]];
-                if(currentBlock.drawBlock()) {
-                    currentBlock.renderblock(startScrX +(i *80), u * 80);
-                }
-//                tileBlocks[levelMap[i+startBlock][u]].renderblock( startScrX + (i * 80), u * 80);
-//                //PApplet.print("Rendering block " + levelMap[i][u] + " on x: " + startScrX  + " and y: " + (u * 80) + "\n");
-            }
-        }
+        applet.image(level, drawX, 0);
+
 
         //kijker
-        applet.stroke(0,0,0);
-        applet.fill(0,0,0);
-        applet.rect(0, 0, applet.width /13, applet.height);
-        applet.rect(applet.width - applet.width /13, 0, applet.width /13, applet.height);
+//        applet.rectMode(PConstants.CORNER);
+//        applet.stroke(0,0,0);
+//        applet.fill(0,0,0);
+//        applet.rect(0, 0, applet.width /13, applet.height);
+//        applet.rect(applet.width - applet.width /13, 0, applet.width /13, applet.height);
 
     }
 
