@@ -5,8 +5,11 @@ import processing.core.PConstants;
 
 /**
  * Created by loren on 10/04/2017.
+ * small class which creates a basic loading screen
+ * this class is lightweight because this cant take long to build and stuff
+ *
  */
-public class LoadScreen {
+class LoadScreen {
     private String loadText;
     private PApplet applet;
 
@@ -15,7 +18,7 @@ public class LoadScreen {
         this.applet = applet;
     }
 
-    public void renderLoadScreen() {
+    void renderLoadScreen() {
         applet.background(0);
         applet.textAlign(PConstants.CENTER, PConstants.CENTER);
         applet.textSize(32);

@@ -8,8 +8,14 @@ import java.awt.print.Paper;
 
 /**
  * Created by loren on 07/04/2017.
+ * class which draws startscreen bcuz u hav to start somewhere nub, git gud.
  */
 class Startscreen {
+    //these be static bcuz lulz
+    private static int BUTTONWIDTH = 160;
+    private static int BUTTONHEIGHT = 80;
+    private static int STARTY = 200;
+    private static int SPACEBETWOONBUTTONS = 40;
 
     //PROPERTIES
     private PImage bImage; //background image
@@ -20,6 +26,15 @@ class Startscreen {
 
     //in the level selection screen
 
+    /*
+    constructor has been overloaded for two usecases
+    1) for a menu selection screen
+        takes an array of strings as param
+    2) for a level selection screen
+        takes the number of levels as param
+     */
+
+    //menu selection screen
     Startscreen(String[] itemsText, PApplet applet) {
         //load the logo to display on top of page
         logo = applet.loadImage("menu_logo.png");
@@ -52,6 +67,25 @@ class Startscreen {
 //        levelSelectPoints[3][1] = 300;
     }
 
+    //level selectin screen
+    Startscreen(int numberOfLevels, PApplet applet) {
+        //load the logo to display on top of page
+        logo = applet.loadImage("menu_logo.png");
+        //set on which applet to draw
+        this.applet = applet;
+
+        //all the items in the menu
+        menuItems = new menuButton[numberOfLevels];
+
+
+        for (int i = 0; i < menuItems.length; i++) {
+            menuItems[i] = new menuButton(applet.width/2, STARTY + (i * (BUTTONHEIGHT + SPACEBETWOONBUTTONS)), BUTTONWIDTH, BUTTONHEIGHT, Integer.toString(i+1), applet, i);
+        }
+
+        selectedButton = menuItems[0];
+        selectedButton.buildSelecter();
+    }
+
     //this function is called by the sketches
     void renderStartScreen() {
         applet.background(0);
@@ -75,18 +109,30 @@ class Startscreen {
 
     }
 
+    //handles key movement in the selection screen
     void keyPressed(int keyCode ) {
+        //checks which key and if the key is possible
+        //up
         if(keyCode == KeyEvent.VK_UP && (selectedButton.arrayID > 0)) {
             //up arrow
             selectedButton = menuItems[selectedButton.arrayID - 1];
             selectedButton.buildSelecter();
         }
+        //down
         else if(keyCode == KeyEvent.VK_DOWN && (selectedButton.arrayID < menuItems.length)) {
             //down arrow
             selectedButton = menuItems[selectedButton.arrayID + 1];
             selectedButton.buildSelecter();
         }
     }
+
+    //returns the index in the array of the selcted element
+    int getIdOfSelected() {
+        return this.selectedButton.arrayID;
+    }
+
+    //return the text in the currently selected button
+    String getTextOfSelected() { return this.selectedButton.buttonText; }
 
     //a subclass for the menubuttons, will only be used here
     private class menuButton {

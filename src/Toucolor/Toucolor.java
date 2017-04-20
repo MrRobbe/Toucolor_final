@@ -56,11 +56,8 @@ public class Toucolor extends PApplet {
     @Override
     public  void setup() {
         //stroke(155,0,0);
-        playerX = 600;
+        playerX = 600; //temp test var
         frameRate(144);
-        levelToLoad = 1;
-//        startLevel();
-//        this.status = "playing";
         status = "initializing";
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
         thread("initWorld");
@@ -101,21 +98,34 @@ public class Toucolor extends PApplet {
 
     @Override
      public void keyPressed() {
+    //TODO: een defitge logica schrijven voor dit
         switch (keyCode) {
             case KeyEvent.VK_ENTER:
+                //enter wordt ingedrukt
                 switch (status) {
                     case "startscreen":
-                        menu = new Startscreen(new String[]{"demo"}, this);
-                        this.status = "levelSelectScreen";
+                        //startscherm is geladen
+                        if(menu.getTextOfSelected().equals(menuTexts[0])) {
+                            //PLAY HAS BEEN SELECTED
+                            menu = new Startscreen(this.numberOfLevels, this);
+                            this.status = "levelSelectScreen";
+                        } else {
+                            //SCORE HAS BEEN SELECTED
+                            //TODO:ROBBE'S Code here
+                        }
                         break;
                     case "levelSelectScreen":
-                        this.levelToLoad = 1;
-                        thread("startLevel");
-                        this.status = "loadScreen";
+                        //levle selectiescherm is geladen
+                        this.levelToLoad = menu.getIdOfSelected() + 1; //set the number of level to load
+                        thread("startLevel"); //init the level in seperate thread
+                        //create new loading screen
+                        this.loadScreen = new LoadScreen("Loading, Please wait.", this);
+                        this.status = "loadScreen"; //change status
                         break;
                 }
                break;
             default:
+                //andere toets
                 switch (status) {
                     case "startscreen":
                         menu.keyPressed(keyCode);
