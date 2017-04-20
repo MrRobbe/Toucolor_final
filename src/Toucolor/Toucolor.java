@@ -3,12 +3,13 @@ package Toucolor;
 /**
  * Created by loren on 02/04/2017.
  */
+import javafx.animation.Animation;
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class Toucolor  extends PApplet {
     public static void main(String args[]) {
         PApplet.main(new String[]{"Toucolor.Toucolor"});
-
 
     }
 
@@ -22,6 +23,9 @@ public class Toucolor  extends PApplet {
 
 
     Enemy[] Enemies = {goedkoop_sletje};
+
+    Animation playerWandelen, enemyWandelen;
+    private PImage spelerImg_A, spelerImg_B, spelerImg_C, spelerImg_D, spelerImg;
 
     //Player variabelern
     float xpos;
@@ -37,33 +41,26 @@ public class Toucolor  extends PApplet {
     @Override
     public void settings() {
         size(sizeX, sizeY);
+
     }
 
 
     @Override
     public void setup(){
         frameRate(144);
+        playerWandelen = new Animation("Toucolooor", 4);
+        enemyWandelen = new Animation("soccer_player_fro", 1); //testenemy
+
     }
 
     @Override
     public void draw(){
         background(225);
+        speler.keyUse();
         EnemiesBehaviour(speler.playerX, speler.playerY);
-        PlayerBehaviour();
-        drawCube();
-    }
-
-    public void tekenMap(float x, float y) {
-        fill(255,0,0);
-        rect(x,y,blockSize,blockSize);
-
-    }
-
-    public void drawCube() {
-        fill(255, 255, 0);
-        rect(speler.playerX, speler.playerY, blockSize, blockSize);
-        fill(0,200,0);
-        rect(goedkoop_sletje.posX,goedkoop_sletje.posY, blockSize, blockSize);
+        enemyWandelen.display(goedkoop_sletje.posX,goedkoop_sletje.posY,'n',0);
+        playerWandelen.display(speler.playerX, speler.playerY, speler.lastMove,speler.imgCounter);
+        tekenmap();
     }
 
     public void keyPressed() {
@@ -105,14 +102,53 @@ public class Toucolor  extends PApplet {
     }
 
 
-    private void PlayerBehaviour(){
+    private void tekenmap(){
         for (float[] hoevcoord:Player.fullCoords) {
             xpos = hoevcoord[0];
             ypos = hoevcoord[1];
-            tekenMap(xpos,ypos);
+            fill(255,0,0);
+            rect(xpos,ypos,blockSize,blockSize);
         }
-        speler.keyUse();
+
     }
+
+    class Animation {
+        PImage[] images;
+        int imageCount;
+        int frame;
+
+        Animation(String imagePrefix, int count) {
+            imageCount = count;
+            images = new PImage[imageCount];
+            for (int i = 0; i < imageCount; i++) {
+                String filename = imagePrefix + nf(i, 1) + ".png";
+                images[i] = loadImage(filename);
+            }
+        }
+
+        void display(float xpos, float ypos, char lastM, int frameR) {
+            if(frameR < (144/4)) {
+                frame = 0;
+            }else if(frameR < (144/4)*2){
+                frame = 1;
+            }else if(frameR < (144/4)*3 ){
+                frame = 2;
+            }else if(frameR < (144/4) *4){
+                frame = 3;
+            }else{
+                speler.imgCounter = 0;
+            }
+            if(lastM == 'r' || lastM == 'n') {
+            image(images[frame], xpos, ypos, blockSize, blockSize);
+        }else{
+            pushMatrix();
+            scale(-1,1);
+            image(images[frame], - (xpos + images[frame].width), ypos, blockSize, blockSize);
+            popMatrix();
+        }
+    }
+
+}
 
 }
 

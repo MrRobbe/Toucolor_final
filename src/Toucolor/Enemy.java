@@ -14,6 +14,7 @@ public class Enemy {
     private float moveSnelh = 0.01f;
     private int moveP;
 
+
     Enemy(int movePath, int range, float moveSpeed, float spawnPosX, float spawnPosY){
         moveP = movePath;
         bereik = range;

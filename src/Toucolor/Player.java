@@ -14,6 +14,7 @@ public class Player {
     static float[][] fullCoords = {{100,640}}; //Hier moeten alle coords komen die gecheckt moeten worden
 
 
+
     //Voor collision
     private float xblock;
     private float yblock;
@@ -40,7 +41,8 @@ public class Player {
     private int colvar;
 
 
-
+    public int imgCounter = 0;
+    public char lastMove = 'n';
 
     float PI = PApplet.PI;
 
@@ -49,11 +51,13 @@ public class Player {
     public void keyUse() {
         if(rightPressed) {
             moveState = 1;
+            imgCounter++;
             colvar = 1;
             moveRight();
         }
         if(leftPressed) {
             moveState = 1;
+            imgCounter++;
             colvar = -1;
             moveLeft();
         }
@@ -89,12 +93,16 @@ public class Player {
     public void moveLeft(){
         if(!collision(moveState)){
             playerX = playerX - (moveSpeed * cProfile);
+            imgCounter++;
+            lastMove = 'l';
         }
     }
 
     public void moveRight(){
         if(!collision(moveState)){
             playerX = playerX + (moveSpeed * cProfile);
+            imgCounter++;
+            lastMove = 'r';
         }
     }
 
