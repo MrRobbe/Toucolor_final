@@ -41,7 +41,6 @@ public class Level {
         this.levelFileName = levelFileName;
         loadTiles();
         loadlevel();
-
     }
 
     /**
@@ -75,8 +74,9 @@ public class Level {
             String imgFileName = row.getString("filename");
             boolean collision = PApplet.parseBoolean(row.getString("collision"));
             boolean brokkelt = PApplet.parseBoolean(row.getString("brokkelt"));
+            boolean kills = PApplet.parseBoolean(row.getString("death"));
 
-            tileBlocks[id] = new Block(id, name, imgFileName, collision, brokkelt, applet); //load the img into the array
+            tileBlocks[id] = new Block(id, name, imgFileName, collision, brokkelt, kills, applet); //load the img into the array
 
 //            //debug info
 //            PApplet.print("img loaded:" + row.getString("filename") + "\n");
