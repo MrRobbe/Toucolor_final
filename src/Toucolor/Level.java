@@ -6,6 +6,7 @@
 package Toucolor;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 import processing.data.*;
 
@@ -21,7 +22,8 @@ public class Level {
      * deze variablen hebben te maken met de algeme looks van het programma
      * kunnen achteraf veranderd worden om het spel mooier te maken
      */
-    private static int blockWidth = 80;
+    private static int BLOCKWIDTH = 80;
+    private static String TILESFILENAME = "tiles.csv"; //file met alle namen van afbeelding
 
     /**
      * PRIVATE VARIABLES
@@ -29,32 +31,16 @@ public class Level {
     //applet
     private PApplet applet;
     //alles voor loadTiles();
-    private int numberOfTiles; //aantal verschillende tiles
     private Block[] tileBlocks; //array met alle afbeeldingen van de tiles
-    private static String tileFileName = "test.csv"; //file met alle namen van afbeelding
     private String levelFileName; //name of the file which describes the Level
     private int[][] levelMap; //an array which holds the map
 
-
-
-    /**
-     *
-     * @param sketch sketch where Level plays in
-     */
-    Level(Toucolor sketch, String levelFilename) {
-        this.applet = sketch;
-        this.levelFileName = levelFilename;
-        loadTiles();
-        loadlevel();
-    }
-
     //not sure if this is used somewhere
-    public void level(PApplet applet, String levelFileName) {
+    Level(PApplet applet, String levelFileName) {
         this.applet = applet;
         this.levelFileName = levelFileName;
         loadTiles();
         loadlevel();
-
     }
 
     /**
@@ -64,7 +50,7 @@ public class Level {
      */
     private void loadTiles() {
         //load the table
-        Table myTable = applet.loadTable(tileFileName, "header, csv");
+        Table myTable = applet.loadTable(TILESFILENAME, "header, csv");
 
         //get number of pictures
         int rowCount = myTable.getRowCount();
@@ -86,9 +72,11 @@ public class Level {
             int id = row.getInt("id"); //get id of img
             String name = row.getString("name");
             String imgFileName = row.getString("filename");
-            boolean collision = PApplet.parseBoolean("true");
+            boolean collision = PApplet.parseBoolean(row.getString("collision"));
+            boolean brokkelt = PApplet.parseBoolean(row.getString("brokkelt"));
+            boolean kills = PApplet.parseBoolean(row.getString("death"));
 
-            tileBlocks[id] = new Block(id, name, imgFileName, collision, applet); //load the img into the array
+            tileBlocks[id] = new Block(id, name, imgFileName, collision, brokkelt, kills, applet); //load the img into the array
 
 //            //debug info
 //            PApplet.print("img loaded:" + row.getString("filename") + "\n");
@@ -119,6 +107,8 @@ public class Level {
                 //PApplet.print(i +" " + c + "\n");
             }
         }
+
+        PApplet.print( this.levelFileName + " has been loaded.\n");
     }
 
     /**
@@ -130,23 +120,26 @@ public class Level {
     void renderLevel(int playerX) {
         /*
          * the position to start drawing:
-         * 80 -( (playerX -600) % 80 )
+         * -( (playerX -600) % 80 ) but it only if playerX - 600 > 0
          *  playerX -600 has to be positive and we need the remainder --> modulo
           */
-        int startScrX =  -((((playerX - 600) < 0) ? 0 : (playerX - 600)) % blockWidth);
-        int startBlock = ((playerX - 600) / blockWidth); //calculates on which block to start
+        int startScrX =  -((((playerX - 600) < 0) ? 0 : (playerX - 600)) % BLOCKWIDTH);
+        int startBlock = ((playerX - 600) / BLOCKWIDTH); //calculates on which block to start
         //test commnet
         //PApplet.print(levelMap.length);
+        applet.rectMode(PConstants.CORNER);
         for (int i = 0; i < 16; i++) {
             for (int u = 0; u < 9; u++) {
-                tileBlocks[levelMap[i+startBlock][u]].renderblock( startScrX + (i * 80), u * 80);
-                //PApplet.print("Rendering block " + levelMap[i][u] + " on x: " + startScrX  + " and y: " + (u * 80) + "\n");
+                Block currentBlock = tileBlocks[levelMap[i +startBlock][u]];
+                if(currentBlock.drawBlock()) {
+                    currentBlock.renderblock(startScrX +(i *80), u * 80);
+                }
+//                tileBlocks[levelMap[i+startBlock][u]].renderblock( startScrX + (i * 80), u * 80);
+//                //PApplet.print("Rendering block " + levelMap[i][u] + " on x: " + startScrX  + " and y: " + (u * 80) + "\n");
             }
         }
 
-
-
-//        //kijker
+        //kijker
         applet.stroke(0,0,0);
         applet.fill(0,0,0);
         applet.rect(0, 0, applet.width /13, applet.height);
