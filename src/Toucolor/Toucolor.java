@@ -3,7 +3,6 @@ package Toucolor;
 /**
  * Created by loren on 02/04/2017.
  */
-import javafx.animation.Animation;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -15,32 +14,25 @@ public class Toucolor  extends PApplet {
 
 
     //Wereld variabelen
-    int sizeX = 1280;
-    int sizeY = 720;
-    static int blockSize = 80;
+    static int WORLDWIDTH = 1280;
+    static int WORLDHEIGHT = 720;
+    static int BLOCKSIZE = 80;
 
     Enemy goedkoop_sletje = new Enemy(3,1,0.01f,400,640);
-
-
     Enemy[] Enemies = {goedkoop_sletje};
 
     Animation playerWandelen, enemyWandelen;
-    private PImage spelerImg_A, spelerImg_B, spelerImg_C, spelerImg_D, spelerImg;
 
     //Player variabelern
     float xpos;
     float ypos;
     private Player speler = new Player();
 
-    //Alle enemies die bestaan met hun eigenschappen
-
-
-
 
 
     @Override
     public void settings() {
-        size(sizeX, sizeY);
+        size(WORLDWIDTH, WORLDHEIGHT);
 
     }
 
@@ -107,7 +99,7 @@ public class Toucolor  extends PApplet {
             xpos = hoevcoord[0];
             ypos = hoevcoord[1];
             fill(255,0,0);
-            rect(xpos,ypos,blockSize,blockSize);
+            rect(xpos,ypos, BLOCKSIZE, BLOCKSIZE);
         }
 
     }
@@ -139,11 +131,11 @@ public class Toucolor  extends PApplet {
                 speler.imgCounter = 0;
             }
             if(lastM == 'r' || lastM == 'n') {
-            image(images[frame], xpos, ypos, blockSize, blockSize);
+            image(images[frame], xpos, ypos, BLOCKSIZE, BLOCKSIZE);
         }else{
             pushMatrix();
             scale(-1,1);
-            image(images[frame], - (xpos + images[frame].width), ypos, blockSize, blockSize);
+            image(images[frame], - (xpos + images[frame].width), ypos, BLOCKSIZE, BLOCKSIZE);
             popMatrix();
         }
     }
