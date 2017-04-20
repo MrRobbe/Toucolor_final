@@ -1,6 +1,7 @@
 package Toucolor;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 
 /**
@@ -29,6 +30,7 @@ public class Block {
 
     //renders this block on given location
     public void renderblock(int x, int y) {
+        applet.imageMode(PConstants.CORNER);
         applet.image(img, x, y, 80, 80);
     }
 

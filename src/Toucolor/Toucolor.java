@@ -7,6 +7,7 @@ package Toucolor;
 
 import processing.core.PApplet;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 
 /**
@@ -29,15 +30,15 @@ public class Toucolor extends PApplet {
      * PRIVATE VARIABLES
      */
     //width & height of world
-    private int worldWidth = 1280;
-    private int worldHeight = 720;
+    private static int WORLDWIDTH = 1280;
+    private static int WORLDHEIGHT = 720;
     //temp playerX --> goes into object later
     private int playerX;
     //array of the world which stores the Level
 
     //levelmanager functions
     private Level currentLevel;
-    private Startscreen menu;
+    public Startscreen menu;
     private String status;
     private int levelToLoad;
 
@@ -57,6 +58,9 @@ public class Toucolor extends PApplet {
         //stroke(155,0,0);
         playerX = 600;
         frameRate(144);
+        levelToLoad = 1;
+//        startLevel();
+//        this.status = "playing";
         status = "initializing";
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
         thread("initWorld");
@@ -67,7 +71,7 @@ public class Toucolor extends PApplet {
      */
     @Override
     public void settings() {
-        size(worldWidth, worldHeight);
+        size(WORLDWIDTH, WORLDHEIGHT);
 
     }
 
@@ -87,7 +91,7 @@ public class Toucolor extends PApplet {
             menu.renderStartScreen();
         }
         else if(status.equals("loadScreen")) {
-            thread("startLevel");
+            loadScreen.renderLoadScreen();
         }
         else if( status.equals("playing")){
             currentLevel.renderLevel(playerX);
@@ -97,19 +101,37 @@ public class Toucolor extends PApplet {
 
     @Override
      public void keyPressed() {
-        if(status.equals("startscreen")) {
-            menu.renderStartScreen();
-            menu.keyPressed(keyCode);
-        }
-        else if(status.equals("levelSelectScreen")) {
+        switch (keyCode) {
+            case KeyEvent.VK_ENTER:
+                switch (status) {
+                    case "startscreen":
+                        menu = new Startscreen(new String[]{"demo"}, this);
+                        this.status = "levelSelectScreen";
+                        break;
+                    case "levelSelectScreen":
+                        this.levelToLoad = 1;
+                        thread("startLevel");
+                        this.status = "loadScreen";
+                        break;
+                }
+               break;
+            default:
+                switch (status) {
+                    case "startscreen":
+                        menu.keyPressed(keyCode);
+                        break;
+                    case "levelSelectScreen":
+                        menu.keyPressed(keyCode);
+                        break;
+                    case "loadScreen":
 
-        }
-        else if(status.equals("loadScreen")) {
+                        break;
+                    case "playing":
 
+                        break;
+                }
         }
-        else if( status.equals("playing")){
 
-        }
     }
 
     /**
@@ -117,10 +139,10 @@ public class Toucolor extends PApplet {
      * makes it ready to render the level
      * this function is used in a seperate thread
      */
-    void startLevel() {
-        Level level = new Level(this, levelFiles[this.levelToLoad -1 ]);
+    public void startLevel() {
+        this.currentLevel = new Level(this, levelFiles[this.levelToLoad -1 ]);
         this.status = "playing";
-        this.currentLevel = level;
+
     }
 
     /**
@@ -145,14 +167,11 @@ public class Toucolor extends PApplet {
         for(int i = 0; i < numberOfLevels; i++) {
             levelFiles[i] = "level" + (i+1) + ".csv";
         }
-        print(numberOfLevels);
+        print("Number of levels: " + numberOfLevels +"\n");
 
 
         //creating menu screen
         menu = new Startscreen( menuTexts, this);
-
-
-
 
         this.status = "startscreen";
     }

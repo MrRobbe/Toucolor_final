@@ -60,11 +60,6 @@ class Startscreen {
         selectedButton.renderSelecter();
     }
 
-    //selects the button the selector is on
-    void enter() {
-
-    }
-
     //draws the logo to screen
     private void renderLogo() {
         //render temp logo
@@ -90,9 +85,6 @@ class Startscreen {
             //down arrow
             selectedButton = menuItems[selectedButton.arrayID + 1];
             selectedButton.buildSelecter();
-        }
-        else if(keyCode == KeyEvent.VK_ENTER) {
-            enter();
         }
     }
 

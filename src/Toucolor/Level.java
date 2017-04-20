@@ -6,6 +6,7 @@
 package Toucolor;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 import processing.data.*;
 
@@ -130,13 +131,14 @@ public class Level {
     void renderLevel(int playerX) {
         /*
          * the position to start drawing:
-         * 80 -( (playerX -600) % 80 )
+         * -( (playerX -600) % 80 ) but it only if playerX - 600 > 0
          *  playerX -600 has to be positive and we need the remainder --> modulo
           */
         int startScrX =  -((((playerX - 600) < 0) ? 0 : (playerX - 600)) % blockWidth);
         int startBlock = ((playerX - 600) / blockWidth); //calculates on which block to start
         //test commnet
         //PApplet.print(levelMap.length);
+        applet.rectMode(PConstants.CORNER);
         for (int i = 0; i < 16; i++) {
             for (int u = 0; u < 9; u++) {
                 tileBlocks[levelMap[i+startBlock][u]].renderblock( startScrX + (i * 80), u * 80);
