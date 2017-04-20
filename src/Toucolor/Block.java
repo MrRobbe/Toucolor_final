@@ -37,6 +37,9 @@ public class Block {
         if(brokkelt) {
             this.framesUntillGone = 432; //only set framesleft indien het brokkelt
         }
+        if(id == 0) {
+            this.drawBlock = false;
+        }
     }
 
     //renders this block on given location

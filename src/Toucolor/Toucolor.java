@@ -44,7 +44,7 @@ public class Toucolor extends PApplet {
     private int levelToLoad;
 
 
-  
+
     Enemy goedkoop_sletje = new Enemy(3,1,0.01f,400,640);
     Enemy[] Enemies = {goedkoop_sletje};
     Animation playerWandelen, enemyWandelen;
@@ -63,9 +63,7 @@ public class Toucolor extends PApplet {
      */
     @Override
     public  void setup() {
-        //stroke(155,0,0);
-        playerX = 600; //temp test var
-        frameRate(144);
+        frameRate(30);
         status = "initializing";
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
         thread("initWorld");
@@ -74,11 +72,10 @@ public class Toucolor extends PApplet {
     /**
      * define and initialize settings for the world
      */
-    
+
     @Override
     public void settings() {
         size(WORLDWIDTH, WORLDHEIGHT);
-
     }
 
     /**
@@ -86,26 +83,27 @@ public class Toucolor extends PApplet {
      */
     @Override
     public void draw() {
-        if(status.equals("initializing")) {
-            //show first loading screen
-            loadScreen.renderLoadScreen();
-        }
-        else if(status.equals("startscreen")) {
-            menu.renderStartScreen();
-        }
-        else if(status.equals("levelSelectScreen")) {
-            menu.renderStartScreen();
-        }
-        else if(status.equals("loadScreen")) {
-            loadScreen.renderLoadScreen();
-        }
-        else if( status.equals("playing")){
-            currentLevel.renderLevel(playerX);
-            background(225);
-            speler.keyUse();
-            EnemiesBehaviour(speler.playerX, speler.playerY);
-            enemyWandelen.display(goedkoop_sletje.posX,goedkoop_sletje.posY,'n',0);
-            playerWandelen.display(speler.playerX, speler.playerY, speler.lastMove,speler.imgCounter);
+        switch (status) {
+            case "initializing":
+                //show first loading screen
+                loadScreen.renderLoadScreen();
+                break;
+            case "startscreen":
+                menu.renderStartScreen();
+                break;
+            case "levelSelectScreen":
+                menu.renderStartScreen();
+                break;
+            case "loadScreen":
+                loadScreen.renderLoadScreen();
+                break;
+            case "playing":
+                currentLevel.renderLevel((int) speler.playerX);
+                speler.keyUse();
+                EnemiesBehaviour(speler.playerX, speler.playerY);
+                enemyWandelen.display(goedkoop_sletje.posX, goedkoop_sletje.posY, 'n', 0);
+                playerWandelen.display(speler.playerX, speler.playerY, speler.lastMove, speler.imgCounter);
+                break;
         }
 
     }
@@ -115,7 +113,7 @@ public class Toucolor extends PApplet {
         for (Enemy vijand:Enemies) {
             if(vijand.EnemyBehave(playerX,playerY)){
                 PApplet.println("DEUD");
-                exit();
+                //exit();
             }
         }
     }
@@ -146,20 +144,26 @@ public class Toucolor extends PApplet {
             }else{
                 speler.imgCounter = 0;
             }
+            xpos = (((xpos - 600) < 0) ? xpos : 600);
+            //kijkt naar rechts
             if(lastM == 'r' || lastM == 'n') {
-            image(images[frame], xpos, ypos, BLOCKSIZE, BLOCKSIZE);
-        }else{
-            pushMatrix();
-            scale(-1,1);
-            image(images[frame], - (xpos + images[frame].width), ypos, BLOCKSIZE, BLOCKSIZE);
-            popMatrix();
-        }
-    }
+                //TODO: edit to make the
 
-}
+                image(images[frame], xpos, ypos, BLOCKSIZE, BLOCKSIZE);
+            }
+            //kijkt naar links
+            else{
+                pushMatrix();
+                scale(-1,1);
+                image(images[frame], - (xpos + images[frame].width), ypos, BLOCKSIZE, BLOCKSIZE);
+                popMatrix();
+            }
+        }
+
+    }
     @Override
-     public void keyPressed() {
-    //TODO: een defitge logica schrijven voor dit
+    public void keyPressed() {
+        //TODO: een defitge logica schrijven voor dit
         switch (keyCode) {
             case KeyEvent.VK_ENTER:
                 //enter wordt ingedrukt
@@ -184,7 +188,7 @@ public class Toucolor extends PApplet {
                         this.status = "loadScreen"; //change status
                         break;
                 }
-               break;
+                break;
             default:
                 //andere toets
                 switch (status) {
@@ -215,7 +219,7 @@ public class Toucolor extends PApplet {
         }
 
     }
-    
+
     public void keyReleased() {
         if(keyCode == RIGHT){
             speler.rightPressed = false;
@@ -234,7 +238,8 @@ public class Toucolor extends PApplet {
      * this function is used in a seperate thread
      */
     public void startLevel() {
-        this.currentLevel = new Level(this, levelFiles[this.levelToLoad -1 ]);
+        //this.currentLevel = new Level(this, levelFiles[this.levelToLoad -1 ]);
+        this.currentLevel = new Level(this, "DemoLevel_NoEnemies.csv");
         playerWandelen = new Animation("Toucolooor", 4);
         enemyWandelen = new Animation("soccer_player_fro", 1); //testenemy
         this.status = "playing";

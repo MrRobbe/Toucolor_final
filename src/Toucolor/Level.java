@@ -23,7 +23,7 @@ public class Level {
      * kunnen achteraf veranderd worden om het spel mooier te maken
      */
     private static int BLOCKWIDTH = 80;
-    private static String TILESFILENAME = "tiles.csv"; //file met alle namen van afbeelding
+    private static String TILESFILENAME = "demoTiles.csv"; //file met alle namen van afbeelding
 
     /**
      * PRIVATE VARIABLES
@@ -34,6 +34,7 @@ public class Level {
     private Block[] tileBlocks; //array met alle afbeeldingen van de tiles
     private String levelFileName; //name of the file which describes the Level
     private int[][] levelMap; //an array which holds the map
+    private PImage background;
 
     //not sure if this is used somewhere
     Level(PApplet applet, String levelFileName) {
@@ -41,6 +42,7 @@ public class Level {
         this.levelFileName = levelFileName;
         loadTiles();
         loadlevel();
+        background = applet.loadImage("Background.jpg");
     }
 
     /**
@@ -118,13 +120,17 @@ public class Level {
      * @param playerX x-coordinate of player
      */
     void renderLevel(int playerX) {
+        //render backgorund
+        applet.imageMode(PConstants.CORNER);
+        applet.background(255);
+        //applet.image(background, 0,0, Toucolor.WORLDWIDTH, Toucolor.WORLDHEIGHT);
         /*
          * the position to start drawing:
          * -( (playerX -600) % 80 ) but it only if playerX - 600 > 0
          *  playerX -600 has to be positive and we need the remainder --> modulo
           */
         int startScrX =  -((((playerX - 600) < 0) ? 0 : (playerX - 600)) % BLOCKWIDTH);
-        int startBlock = ((playerX - 600) / BLOCKWIDTH); //calculates on which block to start
+        int startBlock = ((((playerX - 600) < 0) ? 0 : (playerX - 600)) / BLOCKWIDTH); //calculates on which block to start
         //test commnet
         //PApplet.print(levelMap.length);
         applet.rectMode(PConstants.CORNER);
